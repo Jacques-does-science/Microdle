@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0f1115" />
+  <meta name="description" content="Microdle: identify the hidden food microbe." />
+  <title>Microdle</title>
+
+  <style>
+    :root {
+      --bg-color: #0f1115;
+      --panel-color: #1a1d24;
+      --text-color: #e3e6e8;
+      --muted-text: #a5b0c0;
+      --empty-well: #1a1d24;
+      --border-color: #2d323b;
+      --exact-color: #00bfa5;
+      --partial-color: #ffb300;
+      --danger-color: #ff4a4a;
+      --absent-color: #1a1d24;
+      --key-bg: #4b525f;
+      --key-hover: #5d6675;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg-color);
+      color: var(--text-color);
+      overscroll-behavior: none;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px max(10px, env(safe-area-inset-left)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-right));
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    button {
+      font: inherit;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin: 10px 0 15px;
+      flex-shrink: 0;
+    }
+
+    h1 {
+      margin: 0;
+      letter-spacing: 2px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    #infoBtn {
+      position: absolute;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      padding: 5px;
+      background: transparent;
+      border: 0;
+      color: #8a93a0;
+      cursor: pointer;
+      border-radius: 999px;
+    }
+
+    #infoBtn:hover,
+    #infoBtn:focus-visible {
+      color: #ffffff;
+      outline: 2px solid var(--key-hover);
+      outline-offset: 2px;
+    }
+
+    #infoBtn svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+      pointer-events: none;
+    }
+
+    main {
+      width: 100%;
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 0;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #board {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+      max-width: 800px;
+      align-items: center;
+      margin-bottom: 18px;
+      flex: 1 1 auto;
+      justify-content: center;
+      min-height: 190px;
+    }
+
+    .row {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .row.shake {
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    .tile {
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: var(--empty-well);
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.08s ease;
+    }
+
+    .tile.active {
+      border-color: #5d6675;
+      transform: scale(1.03);
+    }
+
+    .tile.exact {
+      background: var(--exact-color);
+      border-color: var(--exact-color);
+      color: #0f1115;
+    }
+
+    .tile.partial {
+      background: var(--partial-color);
+      border-color: var(--partial-color);
+      color: #0f1115;
+    }
+
+    .tile.absent {
+      background: var(--absent-color);
+      border-color: var(--absent-color);
+      color: #5d6675;
+    }
+
+    #hint-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    #hintBtn {
+      display: none;
+      background: transparent;
+      color: #8a93a0;
+      border: 1px solid #5d6675;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    #hintBtn:hover,
+    #hintBtn:focus-visible {
+      background: var(--panel-color);
+      color: #ffffff;
+      outline: none;
+    }
+
+    #hint-display {
+      display: none;
+      color: var(--partial-color);
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 0 12px;
+    }
+
+    #keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
+    }
+
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .key {
+      height: 50px;
+      flex: 1;
+      max-width: 45px;
+      background: var(--key-bg);
+      color: #ffffff;
+      border: 0;
+      border-radius: 4px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.15s ease, transform 0.08s ease;
+    }
+
+    .key:hover,
+    .key:focus-visible {
+      background: var(--key-hover);
+      outline: none;
+    }
+
+    .key:active {
+      transform: scale(0.97);
+    }
+
+    .key.wide {
+      max-width: 65px;
+      font-size: 0.9rem;
+    }
+
+    .key.exact {
+      background: var(--exact-color);
+      color: #0f1115;
+    }
+
+    .key.partial {
+      background: var(--partial-color);
+      color: #0f1115;
+    }
+
+    .key.absent {
+      background: var(--absent-color);
+      color: #5d6675;
+    }
+
+    #toast {
+      position: fixed;
+      top: max(76px, calc(76px + env(safe-area-inset-top)));
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      color: #000000;
+      padding: 12px 20px;
+      border-radius: 4px;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+      z-index: 3000;
+      white-space: nowrap;
+      max-width: calc(100vw - 30px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #toast.is-visible {
+      opacity: 1;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 17, 21, 0.94);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+    }
+
+    .modal-overlay.is-open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--panel-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 420px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: var(--shadow);
+      color: var(--text-color);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .modal h2 {
+      margin: 0 0 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .modal p {
+      line-height: 1.5;
+      color: var(--muted-text);
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    .modal .primary-btn {
+      width: 100%;
+      margin-top: 24px;
+      padding: 13px 20px;
+      background: var(--exact-color);
+      border: 0;
+      border-radius: 5px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      color: #0f1115;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .modal .primary-btn:active {
+      transform: scale(0.99);
+    }
+
+    .modal .primary-btn:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    .noscript-warning {
+      color: var(--partial-color) !important;
+      font-weight: 700;
+    }
+
+    #fact-modal .genus {
+      font-style: italic;
+      color: var(--exact-color);
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+      overflow-wrap: anywhere;
+    }
+
+    #fact-modal .type {
+      font-size: 0.9rem;
+      color: var(--partial-color);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .instruction-example {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .instruction-example .tile {
+      width: 32px;
+      height: 32px;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .instruction-example p {
+      margin: 0;
+      font-size: 0.85rem;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid var(--border-color);
+      margin: 20px 0;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding-top: 8px;
+      }
+
+      header {
+        margin: 8px 0 10px;
+      }
+
+      h1 {
+        font-size: 1.45rem;
+      }
+
+      #board {
+        gap: 3px;
+        margin-bottom: 12px;
+        min-height: 170px;
+      }
+
+      .row {
+        gap: 2px;
+      }
+
+      .tile {
+        width: 20px;
+        height: 20px;
+        font-size: 0.9rem;
+        border-width: 1px;
+        border-radius: 3px;
+      }
+
+      .instruction-example .tile {
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+      }
+
+      #keyboard {
+        gap: 5px;
+      }
+
+      .keyboard-row {
+        gap: 4px;
+      }
+
+      .key {
+        height: 45px;
+        font-size: 0.9rem;
+        max-width: 32px;
+      }
+
+      .key.wide {
+        max-width: 50px;
+        font-size: 0.75rem;
+      }
+
+      .modal {
+        padding: 22px;
+      }
+    }
+
+    @media (max-width: 350px) {
+      .tile {
+        width: 18px;
+        height: 18px;
+        font-size: 0.8rem;
+      }
+
+      .instruction-example .tile {
+        width: 30px;
+        height: 30px;
+        font-size: 1.1rem;
+      }
+
+      .key {
+        height: 40px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Microdle</h1>
+    <button type="button" id="infoBtn" aria-label="How to play">
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+      </svg>
+    </button>
+  </header>
+
+  <main id="game" aria-label="Microdle game">
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div id="board" aria-label="Guess board"></div>
+
+    <div id="hint-section">
+      <button type="button" id="hintBtn">Run Lab Assay</button>
+      <div id="hint-display" role="status" aria-live="polite"></div>
+    </div>
+
+    <div id="keyboard" aria-label="On-screen keyboard"></div>
+  </main>
+
+  <div id="instructions-overlay" class="modal-overlay is-open" role="dialog" aria-modal="true" aria-labelledby="instructions-title">
+    <div class="modal">
+      <h2 id="instructions-title">How to Play</h2>
+      <p>Identify the hidden food microbe in <strong>8 tries</strong>.</p>
+      <p>Microbes can be pathogens, spoilage organisms, or fermentation organisms. Names vary in length up to 15 letters.</p>
+      <hr />
+
+      <div class="instruction-example">
+        <div class="tile exact">V</div>
+        <p><strong>V</strong> is in the microbe and in the correct spot.</p>
+      </div>
+
+      <div class="instruction-example">
+        <div class="tile partial">I</div>
+        <p><strong>I</strong> is in the microbe but in the wrong spot.</p>
+      </div>
+
+      <div class="instruction-example">
+        <div class="tile absent">B</div>
+        <p><strong>B</strong> is not in the microbe in any spot.</p>
+      </div>
+
+      <hr />
+      <p>Stuck? A <strong>Run Lab Assay</strong> hint button appears after your 2nd incorrect guess to reveal the microbe's taxonomy and Gram stain.</p>
+
+      <noscript>
+        <p class="noscript-warning">This game needs JavaScript. On iPhone, open it from a website link rather than as a WhatsApp file preview.</p>
+      </noscript>
+
+      <button type="button" id="startLabBtn" class="primary-btn">Start Lab</button>
+    </div>
+  </div>
+
+  <div id="fact-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div id="fact-modal" class="modal">
+      <h2 id="modal-title"></h2>
+      <div id="modal-genus" class="genus"></div>
+      <div id="modal-type" class="type"></div>
+      <p id="modal-desc"></p>
+      <button type="button" id="newSpecimenBtn" class="primary-btn">New Specimen</button>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const pathogenDatabase = {
+        SALMONELLA: {
+          class: "Gram-Negative Bacteria",
+          desc: "A common bacterial cause of food poisoning, frequently linked to undercooked poultry and raw eggs."
+        },
+        LISTERIA: {
+          class: "Gram-Positive Bacteria",
+          desc: "A dangerous pathogen that continues to multiply at refrigerator temperatures. High risk for immunocompromised individuals."
+        },
+        CAMPYLOBACTER: {
+          class: "Gram-Negative Bacteria",
+          desc: "Frequently associated with undercooked poultry. A spiral-shaped bacterium that is a major cause of gastroenteritis."
+        },
+        ESCHERICHIA: {
+          class: "Gram-Negative Bacteria",
+          desc: "Commonly known as E. coli. While most strains are harmless, pathogenic strains like O157:H7 produce dangerous Shiga toxins."
+        },
+        STAPHYLOCOCCUS: {
+          class: "Gram-Positive Bacteria",
+          desc: "Produces heat-stable enterotoxins in food, causing rapid onset of severe illness, rather than a slow infection."
+        },
+        CLOSTRIDIUM: {
+          class: "Gram-Positive Bacteria",
+          desc: "Spore-forming, anaerobic bacteria. C. botulinum causes deadly botulism, while C. perfringens is a common cause of food poisoning."
+        },
+        BACILLUS: {
+          class: "Gram-Positive Bacteria",
+          desc: "Spore-forming soil bacteria. B. cereus is notoriously associated with fried rice syndrome due to heat-resistant toxins."
+        },
+        VIBRIO: {
+          class: "Gram-Negative Bacteria",
+          desc: "A marine bacterium associated with eating raw or undercooked seafood, particularly oysters."
+        },
+        SHIGELLA: {
+          class: "Gram-Negative Bacteria",
+          desc: "Highly contagious pathogen with a very low infectious dose. Often spreads through contaminated food, water, or poor hygiene."
+        },
+        CRONOBACTER: {
+          class: "Gram-Negative Bacteria",
+          desc: "Can survive in highly dry environments. A major pathogen of concern in powdered infant formula."
+        },
+        YERSINIA: {
+          class: "Gram-Negative Bacteria",
+          desc: "A psychrotrophic pathogen frequently associated with undercooked pork products."
+        },
+        NOROVIRUS: {
+          class: "Virus",
+          desc: "The leading viral cause of foodborne illness worldwide. Highly contagious, often linked to infected food handlers."
+        },
+        PSEUDOMONAS: {
+          class: "Gram-Negative Bacteria",
+          desc: "A primary strict aerobe responsible for the rapid spoilage of refrigerated fresh meats and dairy."
+        },
+        BROCHOTHRIX: {
+          class: "Gram-Positive Bacteria",
+          desc: "A significant spoilage organism in vacuum-packaged or modified atmosphere meats."
+        },
+        ZYGOSACCHAROMYCES: {
+          class: "Fungus",
+          desc: "A highly osmotolerant spoilage yeast that thrives in high-sugar environments like honey, syrups, and fruit juices."
+        },
+        RHIZOPUS: {
+          class: "Fungus",
+          desc: "A common mold that aggressively spoils bread and soft fruits. Used industrially for fermenting tempeh."
+        },
+        MUCOR: {
+          class: "Fungus",
+          desc: "A mold found in soil and plants. Often causes food spoilage, but some strains are used in cheese ripening."
+        },
+        SACCHAROMYCES: {
+          class: "Fungus",
+          desc: "The foundational yeast of baking, brewing, and winemaking. Converts sugars into ethanol and carbon dioxide."
+        },
+        LACTOBACILLUS: {
+          class: "Gram-Positive Bacteria",
+          desc: "A massive genus of lactic acid bacteria crucial for yogurt, sourdough, pickles, and human probiotic health."
+        },
+        BIFIDOBACTERIUM: {
+          class: "Gram-Positive Bacteria",
+          desc: "A key anaerobic probiotic bacterium found in the gut and often added to functional dairy foods."
+        },
+        STREPTOCOCCUS: {
+          class: "Gram-Positive Bacteria",
+          desc: "While some cause illness, S. thermophilus is an essential starter culture used universally to make yogurt and cheeses."
+        },
+        LACTOCOCCUS: {
+          class: "Gram-Positive Bacteria",
+          desc: "A primary lactic acid bacterial starter culture for an enormous variety of global cheeses."
+        },
+        PEDIOCOCCUS: {
+          class: "Gram-Positive Bacteria",
+          desc: "Used industrially to ferment sausages and vegetables, but notoriously acts as a spoilage organism in beer."
+        },
+        LEUCONOSTOC: {
+          class: "Gram-Positive Bacteria",
+          desc: "Produces diacetyl, giving butter and buttermilk their distinct flavor. Also essential in sauerkraut fermentation."
+        },
+        ACETOBACTER: {
+          class: "Gram-Negative Bacteria",
+          desc: "An aerobic bacterium that converts ethanol to acetic acid, serving as the biological engine of vinegar production."
+        },
+        PROPIONIBACTERIUM: {
+          class: "Gram-Positive Bacteria",
+          desc: "Responsible for the distinct nutty flavor and the carbon dioxide eyes, or holes, in Swiss-style cheeses."
+        },
+        BREVIBACTERIUM: {
+          class: "Gram-Positive Bacteria",
+          desc: "The primary organism responsible for the distinct aroma and orange rind of smear-ripened, washed-rind cheeses."
+        },
+        GEOTRICHUM: {
+          class: "Fungus",
+          desc: "A yeast-like fungus essential for the early stages of rind formation on soft-ripened cheeses like Brie and Camembert."
+        },
+        PENICILLIUM: {
+          class: "Fungus",
+          desc: "Known for spoilage and antibiotics, but specific strains are meticulously used to craft Blue, Camembert, and Brie cheeses."
+        },
+        ASPERGILLUS: {
+          class: "Fungus",
+          desc: "While some produce dangerous aflatoxins, A. oryzae, or koji, is safely used to ferment soy sauce, miso, and sake."
+        }
+      };
+
+      const wordsList = Object.keys(pathogenDatabase);
+      const validWords = new Set(wordsList);
+      const gridCols = 15;
+      const maxGuesses = 8;
+      const keyboardLayout = [
+        ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+        ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+        ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "DEL"]
+      ];
+
+      const state = {
+        targetWord: "",
+        currentGuess: 0,
+        currentLetters: [],
+        gameOver: false,
+        toastTimer: 0
+      };
+
+      const dom = {};
+
+      document.addEventListener("DOMContentLoaded", init);
+
+      function init() {
+        cacheDom();
+        bindControls();
+        setupBoard();
+        setupKeyboard();
+        startNewGame();
+      }
+
+      function cacheDom() {
+        dom.board = document.getElementById("board");
+        dom.keyboard = document.getElementById("keyboard");
+        dom.toast = document.getElementById("toast");
+        dom.instructionsOverlay = document.getElementById("instructions-overlay");
+        dom.factOverlay = document.getElementById("fact-overlay");
+        dom.startLabBtn = document.getElementById("startLabBtn");
+        dom.infoBtn = document.getElementById("infoBtn");
+        dom.hintBtn = document.getElementById("hintBtn");
+        dom.hintDisplay = document.getElementById("hint-display");
+        dom.newSpecimenBtn = document.getElementById("newSpecimenBtn");
+        dom.modalTitle = document.getElementById("modal-title");
+        dom.modalGenus = document.getElementById("modal-genus");
+        dom.modalType = document.getElementById("modal-type");
+        dom.modalDesc = document.getElementById("modal-desc");
+      }
+
+      function bindControls() {
+        bindPress(dom.startLabBtn, () => closeModal(dom.instructionsOverlay));
+        bindPress(dom.infoBtn, () => openModal(dom.instructionsOverlay));
+        bindPress(dom.hintBtn, revealHint);
+        bindPress(dom.newSpecimenBtn, () => {
+          closeModal(dom.factOverlay);
+          startNewGame();
+        });
+
+        document.addEventListener("keydown", handlePhysicalKeyboard);
+      }
+
+      function bindPress(element, callback) {
+        if (!element) return;
+
+        let lastActivation = 0;
+
+        const activate = (event) => {
+          if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          const now = Date.now();
+          if (now - lastActivation < 300) return;
+          lastActivation = now;
+          callback(event);
+        };
+
+        if (window.PointerEvent) {
+          element.addEventListener("pointerup", activate, { passive: false });
+        } else {
+          element.addEventListener("touchend", activate, { passive: false });
+        }
+
+        element.addEventListener("click", activate);
+      }
+
+      function setupBoard() {
+        dom.board.textContent = "";
+
+        for (let r = 0; r < maxGuesses; r += 1) {
+          const row = document.createElement("div");
+          row.className = "row";
+          row.id = `row-${r}`;
+          row.setAttribute("aria-label", `Guess ${r + 1}`);
+
+          for (let c = 0; c < gridCols; c += 1) {
+            const tile = document.createElement("div");
+            tile.className = "tile";
+            tile.setAttribute("aria-label", `Letter ${c + 1}`);
+            row.appendChild(tile);
+          }
+
+          dom.board.appendChild(row);
+        }
+      }
+
+      function setupKeyboard() {
+        dom.keyboard.textContent = "";
+
+        keyboardLayout.forEach((rowKeys) => {
+          const row = document.createElement("div");
+          row.className = "keyboard-row";
+
+          rowKeys.forEach((key) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "key";
+            button.textContent = key;
+            button.id = `key-${key}`;
+            button.setAttribute("aria-label", getKeyLabel(key));
+
+            if (key === "ENTER" || key === "DEL") {
+              button.classList.add("wide");
+            }
+
+            bindPress(button, () => handleInput(key));
+            row.appendChild(button);
+          });
+
+          dom.keyboard.appendChild(row);
+        });
+      }
+
+      function getKeyLabel(key) {
+        if (key === "ENTER") return "Submit guess";
+        if (key === "DEL") return "Delete letter";
+        return `Letter ${key}`;
+      }
+
+      function startNewGame() {
+        state.targetWord = pickWord();
+        state.currentGuess = 0;
+        state.currentLetters = [];
+        state.gameOver = false;
+
+        setupBoard();
+        resetKeyboardColors();
+        resetHint();
+      }
+
+      function pickWord() {
+        const index = Math.floor(Math.random() * wordsList.length);
+        return wordsList[index];
+      }
+
+      function resetKeyboardColors() {
+        document.querySelectorAll(".key").forEach((button) => {
+          button.classList.remove("exact", "partial", "absent");
+        });
+      }
+
+      function resetHint() {
+        dom.hintBtn.style.display = "none";
+        dom.hintDisplay.style.display = "none";
+        dom.hintDisplay.textContent = "";
+      }
+
+      function handlePhysicalKeyboard(event) {
+        if (isModalOpen(dom.instructionsOverlay) || isModalOpen(dom.factOverlay)) return;
+        if (state.gameOver) return;
+
+        const key = event.key;
+
+        if (key === "Backspace" || key === "Delete") {
+          event.preventDefault();
+          handleInput("DEL");
+          return;
+        }
+
+        if (key === "Enter") {
+          event.preventDefault();
+          handleInput("ENTER");
+          return;
+        }
+
+        if (/^[a-zA-Z]$/.test(key)) {
+          event.preventDefault();
+          handleInput(key.toUpperCase());
+        }
+      }
+
+      function handleInput(key) {
+        if (state.gameOver) return;
+
+        if (key === "DEL") {
+          state.currentLetters.pop();
+          updateBoard();
+          return;
+        }
+
+        if (key === "ENTER") {
+          submitGuess();
+          return;
+        }
+
+        if (state.currentLetters.length < gridCols && /^[A-Z]$/.test(key)) {
+          state.currentLetters.push(key);
+          updateBoard();
+        }
+      }
+
+      function updateBoard() {
+        const row = document.getElementById(`row-${state.currentGuess}`);
+        if (!row) return;
+
+        const tiles = row.children;
+
+        for (let i = 0; i < gridCols; i += 1) {
+          const value = state.currentLetters[i] || "";
+          tiles[i].textContent = value;
+          tiles[i].setAttribute("aria-label", value ? `Letter ${i + 1}: ${value}` : `Letter ${i + 1}: empty`);
+          tiles[i].classList.toggle("active", Boolean(value));
+        }
+      }
+
+      function submitGuess() {
+        const guessString = state.currentLetters.join("");
+
+        if (guessString.length < 3) {
+          showToast("Name too short.");
+          return;
+        }
+
+        if (!validWords.has(guessString)) {
+          shakeCurrentRow();
+          showToast("Not in microbe database.");
+          return;
+        }
+
+        evaluateGuess(guessString);
+      }
+
+      function shakeCurrentRow() {
+        const row = document.getElementById(`row-${state.currentGuess}`);
+        if (!row) return;
+
+        row.classList.remove("shake");
+        void row.offsetWidth;
+        row.classList.add("shake");
+      }
+
+      function evaluateGuess(guessString) {
+        const targetLetters = state.targetWord.split("");
+        const guessLetters = state.currentLetters.slice();
+        const row = document.getElementById(`row-${state.currentGuess}`);
+        const tiles = row.children;
+        const keyUpdates = {};
+
+        for (let i = 0; i < guessLetters.length; i += 1) {
+          if (i < state.targetWord.length && guessLetters[i] === targetLetters[i]) {
+            markTile(tiles[i], "exact");
+            keyUpdates[guessLetters[i]] = "exact";
+            targetLetters[i] = null;
+            guessLetters[i] = null;
+          }
+        }
+
+        for (let i = 0; i < guessLetters.length; i += 1) {
+          const letter = guessLetters[i];
+          if (letter === null) continue;
+
+          const matchedIndex = targetLetters.indexOf(letter);
+
+          if (matchedIndex !== -1) {
+            markTile(tiles[i], "partial");
+            if (keyUpdates[letter] !== "exact") {
+              keyUpdates[letter] = "partial";
+            }
+            targetLetters[matchedIndex] = null;
+          } else {
+            markTile(tiles[i], "absent");
+            if (!keyUpdates[letter]) {
+              keyUpdates[letter] = "absent";
+            }
+          }
+        }
+
+        applyKeyboardUpdates(keyUpdates);
+        finishTurn(guessString);
+      }
+
+      function markTile(tile, stateName) {
+        tile.classList.remove("active", "exact", "partial", "absent");
+        tile.classList.add(stateName);
+      }
+
+      function applyKeyboardUpdates(keyUpdates) {
+        Object.entries(keyUpdates).forEach(([letter, stateName]) => {
+          const keyButton = document.getElementById(`key-${letter}`);
+          if (!keyButton) return;
+
+          if (stateName === "exact") {
+            keyButton.classList.remove("partial", "absent");
+            keyButton.classList.add("exact");
+            return;
+          }
+
+          if (stateName === "partial" && !keyButton.classList.contains("exact")) {
+            keyButton.classList.remove("absent");
+            keyButton.classList.add("partial");
+            return;
+          }
+
+          if (
+            stateName === "absent" &&
+            !keyButton.classList.contains("exact") &&
+            !keyButton.classList.contains("partial")
+          ) {
+            keyButton.classList.add("absent");
+          }
+        });
+      }
+
+      function finishTurn(guessString) {
+        if (guessString === state.targetWord) {
+          state.gameOver = true;
+          window.setTimeout(() => showFactCard(true), 800);
+          return;
+        }
+
+        state.currentGuess += 1;
+        state.currentLetters = [];
+
+        if (state.currentGuess === 2) {
+          dom.hintBtn.style.display = "block";
+        }
+
+        if (state.currentGuess >= maxGuesses) {
+          state.gameOver = true;
+          window.setTimeout(() => showFactCard(false), 800);
+        }
+      }
+
+      function revealHint() {
+        if (state.gameOver) return;
+
+        dom.hintBtn.style.display = "none";
+        dom.hintDisplay.style.display = "block";
+        dom.hintDisplay.textContent = `Assay Result: ${pathogenDatabase[state.targetWord].class}`;
+      }
+
+      function showFactCard(isWin) {
+        const data = pathogenDatabase[state.targetWord];
+
+        dom.modalTitle.textContent = isWin ? "Specimen Identified" : "Lab Failure";
+        dom.modalTitle.style.color = isWin ? "var(--exact-color)" : "var(--danger-color)";
+        dom.modalGenus.textContent = state.targetWord;
+        dom.modalType.textContent = `Class: ${data.class}`;
+        dom.modalDesc.textContent = data.desc;
+
+        openModal(dom.factOverlay);
+      }
+
+      function openModal(modal) {
+        modal.classList.add("is-open");
+      }
+
+      function closeModal(modal) {
+        modal.classList.remove("is-open");
+      }
+
+      function isModalOpen(modal) {
+        return modal.classList.contains("is-open");
+      }
+
+      function showToast(message) {
+        window.clearTimeout(state.toastTimer);
+        dom.toast.textContent = message;
+        dom.toast.classList.add("is-visible");
+
+        state.toastTimer = window.setTimeout(() => {
+          dom.toast.classList.remove("is-visible");
+        }, 1500);
+      }
+    })();
+  </script>
+</body>
+</html>
