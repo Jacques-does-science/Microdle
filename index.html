@@ -49,7 +49,8 @@
       flex-direction: column;
       align-items: center;
       padding: 10px max(10px, env(safe-area-inset-left)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-right));
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       touch-action: manipulation;
     }
 
@@ -133,6 +134,7 @@
       display: flex;
       gap: 5px;
       justify-content: center;
+      width: 100%;
     }
 
     .row.shake {
@@ -146,14 +148,16 @@
     }
 
     .tile {
-      width: 40px;
-      height: 40px;
+      flex: 1 1 0;
+      max-width: 40px;
+      min-width: 0;
+      aspect-ratio: 1 / 1;
       border: 2px solid var(--border-color);
       border-radius: 6px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.5rem;
+      font-size: clamp(0.72rem, 3.2vw, 1.5rem);
       font-weight: 700;
       text-transform: uppercase;
       background: var(--empty-well);
@@ -406,10 +410,11 @@
     }
 
     .instruction-example .tile {
+      flex: 0 0 32px;
       width: 32px;
       height: 32px;
+      max-width: 32px;
       font-size: 1.2rem;
-      flex-shrink: 0;
     }
 
     .instruction-example p {
@@ -447,16 +452,17 @@
       }
 
       .tile {
-        width: 20px;
-        height: 20px;
-        font-size: 0.9rem;
+        max-width: 20px;
+        font-size: clamp(0.65rem, 3vw, 0.9rem);
         border-width: 1px;
         border-radius: 3px;
       }
 
       .instruction-example .tile {
+        flex-basis: 32px;
         width: 32px;
         height: 32px;
+        max-width: 32px;
         font-size: 1.2rem;
       }
 
@@ -486,14 +492,15 @@
 
     @media (max-width: 350px) {
       .tile {
-        width: 18px;
-        height: 18px;
-        font-size: 0.8rem;
+        max-width: 18px;
+        font-size: clamp(0.6rem, 2.8vw, 0.8rem);
       }
 
       .instruction-example .tile {
+        flex-basis: 30px;
         width: 30px;
         height: 30px;
+        max-width: 30px;
         font-size: 1.1rem;
       }
 
@@ -531,7 +538,7 @@
     <div class="modal">
       <h2 id="instructions-title">How to Play</h2>
       <p>Identify the hidden food microbe in <strong>8 tries</strong>.</p>
-      <p>Microbes can be pathogens, spoilage organisms, or fermentation organisms. Names vary in length up to 15 letters.</p>
+      <p>Microbes can be pathogens, spoilage organisms, or fermentation organisms. Names vary in length.</p>
       <hr />
 
       <div class="instruction-example">
@@ -550,7 +557,7 @@
       </div>
 
       <hr />
-      <p>Stuck? A <strong>Run Lab Assay</strong> hint button appears after your 2nd incorrect guess to reveal the microbe's taxonomy and Gram stain.</p>
+      <p>Stuck? A <strong>Run Lab Assay</strong> hint button appears after your 2nd incorrect guess to reveal the microbe's organism type.</p>
 
       <noscript>
         <p class="noscript-warning">This game needs JavaScript. On iPhone, open it from a website link rather than as a WhatsApp file preview.</p>
@@ -699,7 +706,7 @@
 
       const wordsList = Object.keys(pathogenDatabase);
       const validWords = new Set(wordsList);
-      const gridCols = 15;
+      const gridCols = Math.max(...wordsList.map((word) => word.length));
       const maxGuesses = 8;
       const keyboardLayout = [
         ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -721,10 +728,23 @@
 
       function init() {
         cacheDom();
+        validateDatabase();
         bindControls();
-        setupBoard();
         setupKeyboard();
         startNewGame();
+      }
+
+      function validateDatabase() {
+        const invalidWords = wordsList.filter((word) => !/^[A-Z]+$/.test(word));
+        const duplicates = wordsList.filter((word, index) => wordsList.indexOf(word) !== index);
+
+        if (invalidWords.length > 0) {
+          console.warn("Microdle database contains invalid words:", invalidWords);
+        }
+
+        if (duplicates.length > 0) {
+          console.warn("Microdle database contains duplicate words:", duplicates);
+        }
       }
 
       function cacheDom() {
@@ -983,8 +1003,18 @@
           }
         }
 
+        markMatchingTrailingBlanks(tiles, guessString.length);
         applyKeyboardUpdates(keyUpdates);
         finishTurn(guessString);
+      }
+
+      function markMatchingTrailingBlanks(tiles, guessLength) {
+        const firstSharedBlankIndex = Math.max(guessLength, state.targetWord.length);
+
+        for (let i = firstSharedBlankIndex; i < gridCols; i += 1) {
+          markTile(tiles[i], "exact");
+          tiles[i].setAttribute("aria-label", `Position ${i + 1}: blank, correct`);
+        }
       }
 
       function markTile(tile, stateName) {
