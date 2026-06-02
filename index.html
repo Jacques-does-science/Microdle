@@ -5,10 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#0f1115" />
-  <meta name="description" content="Microdle: identify the hidden food microbe." />
+  <meta name="description" content="Play Microdle, a food microbiology word puzzle where you identify hidden foodborne, spoilage, and fermentation microbes in eight guesses." />
   <meta name="google-site-verification" content="afR7amO8IxUSAKVvTACIXTwa_vhzCxof-pkgBgT6yvY" />
-  <title>Microdle</title>
-<script
+  <link rel="canonical" href="https://jacques-does-science.github.io/Microdle/" />
+  <title>Microdle — Food Microbiology Word Puzzle</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Microdle",
+    "url": "https://jacques-does-science.github.io/Microdle/",
+    "applicationCategory": "GameApplication",
+    "isAccessibleForFree": "true",
+    "operatingSystem": "All",
+    "description": "Microdle is an educational food microbiology puzzle game where players identify hidden foodborne, spoilage, and fermentation microbes in eight guesses."
+  }
+  </script>
+  <script
     data-goatcounter="https://microdle.goatcounter.com/count"
     async
     src="https://gc.zgo.at/count.js">
@@ -514,6 +527,75 @@
         font-size: 0.8rem;
       }
     }
+
+    /* SEO Info Section & Footer Styling */
+    .seo-section {
+      width: 100%;
+      max-width: 600px;
+      margin: 40px auto 20px;
+      padding: 20px;
+      border-top: 1px solid var(--border-color);
+      color: var(--muted-text);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .seo-section h2 {
+      color: var(--text-color);
+      font-size: 1.25rem;
+      margin-top: 24px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .seo-section h2:first-of-type {
+      margin-top: 0;
+    }
+
+    .seo-section p {
+      margin: 0 0 16px;
+    }
+
+    .seo-section ul {
+      margin: 0 0 16px;
+      padding-left: 20px;
+    }
+
+    .seo-section li {
+      margin-bottom: 6px;
+    }
+
+    footer {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto 40px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted-text);
+    }
+
+    footer .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 18px;
+      margin-bottom: 12px;
+    }
+
+    footer a {
+      color: var(--exact-color);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    footer a:hover,
+    footer a:focus-visible {
+      color: #ffffff;
+      text-decoration: underline;
+      outline: none;
+    }
   </style>
 </head>
 
@@ -538,6 +620,45 @@
 
     <div id="keyboard" aria-label="On-screen keyboard"></div>
   </main>
+
+  <section class="seo-section" aria-labelledby="about-title">
+    <h2 id="about-title">What is Microdle?</h2>
+    <p>
+      Microdle is an educational <strong>food microbiology game</strong> designed as a science-themed <strong>microbiology word puzzle</strong>. In this interactive <strong>microbe identification game</strong>, players are challenged to identify a hidden genus of foodborne pathogens, food spoilage organisms, or beneficial fermentation microbes within eight attempts.
+    </p>
+    <p>
+      The game tests your knowledge of biology, biochemistry, food science, and hygiene. It provides structural feedback for entered words, turning a fun gameplay session into an interactive <strong>food science learning game</strong>.
+    </p>
+
+    <h2>Who is Microdle for?</h2>
+    <p>
+      Whether you are a student preparing for a <strong>food safety game</strong> or test, a culinary enthusiast fascinated by sourdough and cheese, or a scientist who loves a good <strong>microbiology word puzzle</strong>, Microdle is for you. It bridges academic research and gamified education, providing an accessible yet challenging intellectual workout. Non-experts can use the progressive lab assay hint system to reveal specimen classifications, habitats, and clinical indicators as they play.
+    </p>
+
+    <h2>What microbes are included?</h2>
+    <p>
+      The game selects from a curated list of microbes that play a vital role in our food supply chain. Players will encounter:
+    </p>
+    <ul>
+      <li><strong>Pathogens:</strong> Test your skills with a <strong>foodborne pathogen quiz</strong> covering well-known threats like <em>Salmonella</em>, <em>Listeria</em>, and <em>Escherichia</em>.</li>
+      <li><strong>Spoilage Organisms:</strong> Learn about organisms responsible for fresh food deterioration, such as <em>Pseudomonas</em>.</li>
+      <li><strong>Fermentation Microbes:</strong> Challenge yourself on a <strong>fermentation microbe quiz</strong> featuring beneficial yeasts and bacteria like <em>Saccharomyces</em> and <em>Lactobacillus</em>.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="how-to-play">How to Play</a>
+      <a href="food-microbiology-game">Food Microbiology Game</a>
+      <a href="microbe-identification-game">Microbe Identification Game</a>
+      <a href="foodborne-pathogen-quiz">Foodborne Pathogen Quiz</a>
+      <a href="fermentation-microbes-quiz">Fermentation Microbes Quiz</a>
+      <a href="food-safety-game">Food Safety Game</a>
+    </div>
+    <div class="copyright">
+      &copy; 2026 Microdle. All rights reserved. Educational biology resource.
+    </div>
+  </footer>
 
   <div id="instructions-overlay" class="modal-overlay is-open" role="dialog" aria-modal="true" aria-labelledby="instructions-title">
     <div class="modal">
