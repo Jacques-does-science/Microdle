@@ -3,45 +3,4 @@
   <url>
     <loc>https://jacques-does-science.github.io/Microdle/</loc>
   </url>
-  <!-- 
-    Ready for future search pages. 
-    Once you build these files in your repository, simply uncomment the URL entries below:
-    
-  <url>
-    <loc>https://jacques-does-science.github.io/Microdle/how-to-play</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jacques-does-science.github.io/Microdle/food-microbiology-game</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jacques-does-science.github.io/Microdle/microbe-identification-game</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jacques-does-science.github.io/Microdle/foodborne-pathogen-quiz</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jacques-does-science.github.io/Microdle/fermentation-microbes-quiz</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jacques-does-science.github.io/Microdle/food-safety-game</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  -->
 </urlset>
