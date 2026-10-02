@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#0f1115" />
-  <meta name="description" content="Play Microdle, a food microbiology word puzzle where you identify hidden foodborne, spoilage, and fermentation microbes in eight guesses." />
+  <meta name="description" content="Microdle is a food microbiology word puzzle: guess the hidden pathogen, spoilage organism, or fermentation microbe in eight tries." />
   <meta name="google-site-verification" content="afR7amO8IxUSAKVvTACIXTwa_vhzCxof-pkgBgT6yvY" />
   <link rel="canonical" href="https://jacques-does-science.github.io/Microdle/" />
-  <title>Microdle — Food Microbiology Word Puzzle</title>
+  <title>Microdle: Food Microbiology Word Puzzle</title>
   <script
     data-goatcounter="https://microdle.goatcounter.com/count"
     async
@@ -527,15 +527,15 @@
   <section class="seo-section" aria-labelledby="about-title">
     <h2 id="about-title">What is Microdle?</h2>
     <p>
-      Microdle is an educational <strong>food microbiology game</strong> designed as a science-themed <strong>microbiology word puzzle</strong>. In this interactive <strong>microbe identification game</strong>, players are challenged to identify a hidden genus of foodborne pathogens, food spoilage organisms, or beneficial fermentation microbes within eight attempts.
+      Microdle is a word puzzle about food microbiology. You have eight guesses to identify a hidden microbe, and each guess shows which letters are in its name and which are in the right place.
     </p>
     <p>
-      The game tests your knowledge of biology, biochemistry, food science, and hygiene. It provides structural feedback for entered words, turning a fun gameplay session into an interactive <strong>food science learning game</strong>.
+      When the game ends, a short card explains what the microbe is and why it matters in food.
     </p>
 
     <h2>Who is Microdle for?</h2>
     <p>
-      Whether you are a student preparing for a <strong>food safety game</strong> or test, a culinary enthusiast fascinated by sourdough and cheese, or a scientist who loves a good <strong>microbiology word puzzle</strong>, Microdle is for you. It bridges academic research and gamified education, providing an accessible yet challenging intellectual workout. Non-experts can use the progressive lab assay hint system to reveal specimen classifications, habitats, and clinical indicators as they play.
+      Microdle is for food science students, microbiology learners, fermentation enthusiasts, and food safety professionals. You don't need to know the names already: after your second guess, Run Lab Assay unlocks hints one guess at a time, showing the microbe's class, where it's found, a clue, and finally its first letter.
     </p>
 
     <h2>What microbes are included?</h2>
@@ -559,7 +559,7 @@
   <dialog id="instructions" class="modal" aria-labelledby="instructions-title">
     <h2 id="instructions-title">How to Play</h2>
     <p>Identify the hidden food microbe in <strong>8 tries</strong>.</p>
-    <p>Microbes can be pathogens, spoilage organisms, or fermentation organisms. Names vary in length.</p>
+    <p>The answer can be a pathogen, a spoilage organism, or a fermentation microbe. Names vary in length, so empty squares past the end of both your guess and the answer count as correct.</p>
     <hr />
 
     <div class="instruction-example">
@@ -578,7 +578,7 @@
     </div>
 
     <hr />
-    <p>Stuck? After your 2nd guess, <strong>Run Lab Assay</strong> unlocks hints one guess at a time: the microbe's class, where it's found, a clue, and finally its first letter.</p>
+    <p>Stuck? After your second guess, <strong>Run Lab Assay</strong> unlocks hints one guess at a time: the microbe's class, where it's found, a clue, and finally its first letter.</p>
 
     <form method="dialog">
       <button class="primary-btn">Start Lab</button>
@@ -601,7 +601,7 @@
         class: "Gram-Negative Bacteria",
         desc: "A common bacterial cause of food poisoning, frequently linked to undercooked poultry and raw eggs.",
         source: "Frequently linked to undercooked poultry and raw eggs.",
-        clue: "A very common bacterial cause of food poisoning."
+        clue: "One of the most common bacterial causes of food poisoning."
       },
       LISTERIA: {
         class: "Gram-Positive Bacteria",
@@ -617,27 +617,27 @@
       },
       ESCHERICHIA: {
         class: "Gram-Negative Bacteria",
-        desc: "Commonly known as E. coli. While most strains are harmless, pathogenic strains like O157:H7 produce dangerous Shiga toxins.",
-        source: "Commonly found in the gut flora of warm-blooded organisms; used as a key indicator of fecal contamination.",
-        clue: "Produces dangerous Shiga toxins causing severe foodborne illness."
+        desc: "Its best-known species is E. coli. Most strains are harmless, but pathogenic strains such as O157:H7 produce dangerous Shiga toxins.",
+        source: "Lives in the gut of warm-blooded animals and is used as an indicator of fecal contamination.",
+        clue: "Some strains produce Shiga toxins that cause severe foodborne illness."
       },
       STAPHYLOCOCCUS: {
         class: "Gram-Positive Bacteria",
-        desc: "Produces heat-stable enterotoxins in food, causing rapid onset of severe illness, rather than a slow infection.",
+        desc: "Produces heat-stable enterotoxins in food. The toxin, not an infection, causes the illness, so severe symptoms start quickly.",
         source: "Often found on human skin and in foods left at room temperature.",
-        clue: "Produces heat-stable enterotoxins causing rapid onset of severe illness."
+        clue: "Its heat-stable toxins cause severe illness that starts quickly."
       },
       CLOSTRIDIUM: {
         class: "Gram-Positive Bacteria",
         desc: "Spore-forming, anaerobic bacteria. C. botulinum causes deadly botulism, while C. perfringens is a common cause of food poisoning.",
         source: "Spore-forming, anaerobic soil bacteria.",
-        clue: "Certain species cause deadly botulism, others cause common food poisoning."
+        clue: "Some species cause deadly botulism; others cause common food poisoning."
       },
       BACILLUS: {
         class: "Gram-Positive Bacteria",
-        desc: "Spore-forming soil bacteria. B. cereus is notoriously associated with fried rice syndrome due to heat-resistant toxins.",
+        desc: "Spore-forming soil bacteria. B. cereus is best known for 'fried rice syndrome', caused by its heat-resistant toxins.",
         source: "Spore-forming soil bacteria often associated with starches.",
-        clue: "Notoriously associated with 'fried rice syndrome' due to heat-resistant toxins."
+        clue: "Best known for 'fried rice syndrome', caused by heat-resistant toxins."
       },
       VIBRIO: {
         class: "Gram-Negative Bacteria",
@@ -653,15 +653,15 @@
       },
       CRONOBACTER: {
         class: "Gram-Negative Bacteria",
-        desc: "Can survive in highly dry environments. A major pathogen of concern in powdered infant formula.",
-        source: "Extremely resilient bacterium that can survive in highly dry environments.",
+        desc: "Survives in very dry environments and is a major concern in powdered infant formula.",
+        source: "A hardy bacterium that survives in very dry environments.",
         clue: "A major pathogen of concern in powdered infant formula."
       },
       YERSINIA: {
         class: "Gram-Negative Bacteria",
         desc: "A psychrotrophic pathogen frequently associated with undercooked pork products.",
-        source: "A psychrotrophic (cold-tolerant) pathogen.",
-        clue: "Frequently associated with undercooked pork products."
+        source: "Frequently associated with undercooked pork products.",
+        clue: "A psychrotrophic (cold-tolerant) pathogen."
       },
       BRUCELLA: {
         class: "Gram-Negative Bacteria",
@@ -695,21 +695,21 @@
       },
       HEPATITIS: {
         class: "Virus",
-        desc: "Represents hepatitis A virus, a foodborne virus associated with contaminated produce, shellfish, and infected food handlers.",
+        desc: "Stands for hepatitis A virus, which spreads through contaminated produce, shellfish, and infected food handlers.",
         source: "Associated with contaminated produce, shellfish, and water.",
         clue: "A viral cause of liver inflammation, spread by infected food handlers."
       },
       ROTAVIRUS: {
         class: "Virus",
         desc: "A highly contagious gastrointestinal virus. Foodborne spread can occur through poor hygiene and contaminated ready-to-eat foods.",
-        source: "A highly contagious virus causing severe gastrointestinal symptoms.",
-        clue: "Spread through poor hygiene and contaminated ready-to-eat foods."
+        source: "Spread through poor hygiene and contaminated ready-to-eat foods.",
+        clue: "A highly contagious virus causing severe gastrointestinal symptoms."
       },
       CYCLOSPORA: {
         class: "Parasite",
         desc: "A protozoan parasite linked to contaminated fresh produce such as berries, herbs, and leafy greens.",
-        source: "A microscopic protozoan parasite.",
-        clue: "Commonly linked to contaminated fresh produce, such as berries and herbs."
+        source: "Commonly linked to contaminated fresh produce, such as berries and herbs.",
+        clue: "A microscopic protozoan parasite."
       },
       TOXOPLASMA: {
         class: "Parasite",
@@ -725,14 +725,14 @@
       },
       PSEUDOMONAS: {
         class: "Gram-Negative Bacteria",
-        desc: "A primary strict aerobe responsible for the rapid spoilage of refrigerated fresh meats and dairy.",
+        desc: "A strict aerobe and a leading cause of rapid spoilage in refrigerated fresh meat and dairy.",
         source: "A strict aerobe (requires oxygen) commonly found in soil and water.",
-        clue: "Responsible for the rapid spoilage of refrigerated fresh meats and dairy."
+        clue: "Quickly spoils refrigerated fresh meat and dairy."
       },
       RHIZOPUS: {
         class: "Fungus",
-        desc: "A common mold that aggressively spoils bread and soft fruits. Used industrially for fermenting tempeh.",
-        source: "A common mold that aggressively spoils bread and soft fruits.",
+        desc: "A common mold that quickly spoils bread and soft fruit. It is also used to ferment soybeans into tempeh.",
+        source: "A common mold that quickly spoils bread and soft fruit.",
         clue: "Used industrially to ferment soybeans into tempeh."
       },
       MUCOR: {
@@ -744,62 +744,62 @@
       CANDIDA: {
         class: "Fungus",
         desc: "A yeast genus found in many environments. Some species occur in fermented foods, while others are opportunistic human pathogens.",
-        source: "A yeast genus widely found in many environments.",
-        clue: "Occurs in fermented foods, while some are opportunistic human pathogens."
+        source: "A yeast genus found in many environments.",
+        clue: "Some species occur in fermented foods; others are opportunistic human pathogens."
       },
       BOTRYTIS: {
         class: "Fungus",
         desc: "A mold best known for gray mold spoilage of fruits and vegetables, and noble rot in certain dessert wine grapes.",
-        source: "A mold best known for causing gray mold spoilage on fruits/vegetables.",
-        clue: "Causes 'noble rot' essential for making certain sweet dessert wines."
+        source: "Causes gray mold spoilage on fruits and vegetables.",
+        clue: "Causes the 'noble rot' used to make some sweet dessert wines."
       },
       SACCHAROMYCES: {
         class: "Fungus",
-        desc: "The foundational yeast of baking, brewing, and winemaking. Converts sugars into ethanol and carbon dioxide.",
-        source: "The foundational yeast of baking, brewing, and winemaking.",
+        desc: "The main yeast used in baking, brewing, and winemaking. It converts sugars into ethanol and carbon dioxide.",
+        source: "The main yeast used in baking, brewing, and winemaking.",
         clue: "Converts sugars into ethanol and carbon dioxide."
       },
       LACTOBACILLUS: {
         class: "Gram-Positive Bacteria",
-        desc: "A massive genus of lactic acid bacteria crucial for yogurt, sourdough, pickles, and human probiotic health.",
-        source: "A massive genus of rod-shaped lactic acid bacteria.",
-        clue: "Crucial for fermenting yogurt, sourdough, pickles, and supporting gut health."
+        desc: "A genus of lactic acid bacteria used to make yogurt, sourdough, and pickles, and sold as probiotics.",
+        source: "Found in yogurt, sourdough, pickles, and probiotic supplements.",
+        clue: "A genus of rod-shaped lactic acid bacteria."
       },
       BIFIDOBACTERIUM: {
         class: "Gram-Positive Bacteria",
-        desc: "A key anaerobic probiotic bacterium found in the gut and often added to functional dairy foods.",
-        source: "A key anaerobic probiotic bacterium found in the gut.",
+        desc: "An anaerobic gut bacterium often added to functional dairy foods as a probiotic.",
+        source: "An anaerobic probiotic bacterium found in the gut.",
         clue: "Frequently added to functional dairy foods like yogurt."
       },
       STREPTOCOCCUS: {
         class: "Gram-Positive Bacteria",
-        desc: "While some cause illness, S. thermophilus is an essential starter culture used universally to make yogurt and cheeses.",
-        source: "A spherical bacterium that grows in chains.",
-        clue: "S. thermophilus is an essential starter culture for yogurt and cheese."
+        desc: "Some species cause illness, but S. thermophilus is a standard starter culture for yogurt and many cheeses.",
+        source: "Found in yogurt and cheese, where one species is a standard starter culture.",
+        clue: "A spherical bacterium that grows in chains."
       },
       LACTOCOCCUS: {
         class: "Gram-Positive Bacteria",
-        desc: "A primary lactic acid bacterial starter culture for an enormous variety of global cheeses.",
-        source: "A spherical lactic acid bacterium.",
-        clue: "A primary starter culture used to produce an enormous variety of global cheeses."
+        desc: "A lactic acid bacterium and one of the main starter cultures for cheeses around the world.",
+        source: "Found in many of the world's cheeses as a main starter culture.",
+        clue: "A spherical lactic acid bacterium."
       },
       ACETOBACTER: {
         class: "Gram-Negative Bacteria",
-        desc: "An aerobic bacterium that converts ethanol to acetic acid, serving as the biological engine of vinegar production.",
-        source: "An aerobic bacterium that converts ethanol to acetic acid.",
-        clue: "Serves as the biological engine of vinegar production."
+        desc: "An aerobic bacterium that converts ethanol to acetic acid, which is how vinegar is made.",
+        source: "Used in vinegar production.",
+        clue: "An aerobic bacterium that converts ethanol to acetic acid."
       },
       PENICILLIUM: {
         class: "Fungus",
-        desc: "Known for spoilage and antibiotics, but specific strains are meticulously used to craft Blue, Camembert, and Brie cheeses.",
-        source: "Known for blue-green spoilage mold and penicillin production.",
-        clue: "Meticulously used to craft Blue, Camembert, and Brie cheeses."
+        desc: "Known for food spoilage and antibiotics. Specific strains are also used to ripen blue cheese, Camembert, and Brie.",
+        source: "Used to ripen blue cheese, Camembert, and Brie.",
+        clue: "Known for blue-green spoilage mold and penicillin production."
       },
       ASPERGILLUS: {
         class: "Fungus",
-        desc: "While some produce dangerous aflatoxins, A. oryzae, or koji, is safely used to ferment soy sauce, miso, and sake.",
-        source: "A filamentous mold; some wild species produce dangerous aflatoxins.",
-        clue: "Koji mold (A. oryzae) is used to ferment soy sauce, miso, and sake."
+        desc: "Some species produce dangerous aflatoxins, but A. oryzae (koji) is safely used to ferment soy sauce, miso, and sake.",
+        source: "Koji mold, used to ferment soy sauce, miso, and sake.",
+        clue: "A filamentous mold; some wild species produce dangerous aflatoxins."
       }
     };
 
@@ -977,8 +977,8 @@
     function misspellingMessage(guess) {
       const distance = Math.min(...wordsList.map((word) => editDistance(guess, word)));
       return distance <= 3
-        ? `Close spelling! Only ${distance} letter${distance > 1 ? "s" : ""} off a valid microbe.`
-        : "Not in microbe database.";
+        ? `Close! ${distance} letter${distance > 1 ? "s" : ""} off a microbe.`
+        : "Not in the microbe list.";
     }
 
     function scoreGuess(guess) {
