@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://jacques-does-science.github.io/Microdle/sitemap.xml
