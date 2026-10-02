@@ -9,13 +9,13 @@ https://jacques-does-science.github.io/Microdle/
 
 ## Overview
 
-Microdle challenges players to identify a hidden microbe genus from a curated food microbiology database. Each guess provides letter-based feedback:
+Each game hides one microbe from a curated list of food microbes. Each guess gets letter-by-letter feedback:
 - Correct letters in the correct position are marked as exact matches.
 - Correct letters in the wrong position are marked as partial matches.
 - Letters that are not part of the answer are marked as absent.
-- Blank trailing positions are also evaluated because microbe names vary in length.
+- Microbe names vary in length, so empty positions past the end of both the guess and the answer are marked as exact matches.
 
-The goal is to identify the hidden microbe within eight attempts.
+After the second guess, players can unlock up to four hints, one per guess: the microbe's class, where it is found, a clue, and its first letter. When the game ends, a fact card describes the microbe.
 
 ## Educational Focus
 
@@ -30,4 +30,4 @@ Microdle is intended to make food microbiology more engaging and approachable. T
 - Refrigerated food risks
 - Probiotic and starter culture organisms
 
-Rather than functioning only as a spelling puzzle, Microdle is designed to reinforce recognition of important food microbes and their biological or food-related significance.
+The hints and the end-of-game fact card go beyond spelling: they cover what each microbe is and why it matters in food.
